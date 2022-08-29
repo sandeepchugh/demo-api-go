@@ -1,11 +1,13 @@
 package app
 
 import (
+	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/sandeepchugh/banking/domain"
 	"github.com/sandeepchugh/banking/service"
 	"log"
 	"net/http"
+	"os"
 )
 
 func Start() {
@@ -20,5 +22,8 @@ func Start() {
 	router.HandleFunc("/customers", ch.getAllCustomers).Methods(http.MethodGet)
 	router.HandleFunc("/customers/{customer_id:[0-9]+}", ch.getCustomer).Methods(http.MethodGet)
 
-	log.Fatal(http.ListenAndServe("localhost:8000", router))
+	address := os.Getenv("SERVER_ADDRESS")
+	port := os.Getenv("PORT")
+
+	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%s", address, port), router))
 }
